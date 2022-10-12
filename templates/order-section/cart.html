@@ -1,0 +1,119 @@
+{% extends 'index.html' %} {% block title %}
+<title>Shopping | Cart</title>
+{% endblock title %} 
+{% block content %}
+<div class="container my-2">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+      <li class="breadcrumb-item active">Cart</li>
+    </ol>
+  </nav>
+      <div class="row my-3">
+        <div class="col-sm-12">
+         <div class="row">
+          {% if cart %}
+          <div class="col-sm-12">
+            <div class="row">
+              {% for item in cart %}
+              <div class="col mx-auto" >
+                <div class="card border-light mb-3 shadow-sm "  >
+                  <img
+                    class="card-img-top"
+                    src="{{item.product.product_image.url}}"
+                    style="object-fit: contain;height: 4rem;"
+                    alt="Category_Img"
+                  />
+                  <div class="card-body">
+                    <h5 class="card-title text-center" style="font-size: 1rem;">{{item.product.name}}</h5>
+                    <p><span class="float-start" style="font-size: .8rem;">Unit: {{item.product.sell_price | stringformat:'d' }}</span>
+                      <span class="float-end" style="font-size: .8rem;"><span  id="amt">{{item.total_cost | stringformat:'d' }}</span></span></p><br>
+                      <div class="d-block text-center">
+                        <div class="input-group mx-auto" style="width: 7rem;">
+                          <button class="btn bg-success text-light bg-gradient input-group-item" id="minusBtn">-</button>
+                          <input type="text" readonly class="form-control input-group-text" id="pqty" value="{{item.prod_quantity}}">
+                          <button class="btn bg-success text-light bg-gradient input-group-item" id="plusBtn">+</button>
+                        </div>
+                      </div>
+                      <br>
+                    <div class="text-center d-block">
+                      <a href="{% url 'deleteCart' item.product.id %}" onclick="return confirm('Do you Sure ?')" class="btn btn-warning bg-gradient" style="border: none;outline: none;border-radius: 2rem;">Remove</a>
+                    </div>
+                  </div>
+              </div>
+            </div>
+            {% endfor %}
+            </div>
+          </div>
+              <div class="row">
+                <div class="col-sm-6  mx-auto text-center">
+                  <div class="vstact">
+                    <!-- <p class="fw-light fs-4" >Total Amount</p>
+                    <p class="fw-light fs-4" id="total">0</p> -->
+                  <a href="{% url 'checkout' %}" class="btn bg-primary text-light bg-gradient shadow my-4" style="border: none;outline: none;border-radius: 1rem;">Place Order</a>
+                  </div>
+                </div>
+              </div>
+          {% else %}
+          <div class="col-sm-4 text-center mx-auto">
+            <p class=" display-3">Oops!!</p> <br>
+            <p class=" display-5">Your Cart is Empty</p>
+          </div>
+          {% endif %}
+         </div>
+        </div>
+      </div>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+  <script>
+    // const nodes = document.querySelectorAll('#amt');
+    // const arr = Array.from(nodes);
+    // const res = arr.reduce((acc,curr)=>{
+    //   return acc += Number(curr.textContent)
+    // },0);
+    // if (res){
+    //   document.getElementById("total").innerHTML="Rs : "+res;
+    // }
+    document.addEventListener('DOMContentLoaded',(event)=>{
+      const btnMinus = document.getElementById('minusBtn');
+      const btnPlus = document.getElementById('plusBtn');
+      const prd_qty = document.getElementById('pqty');
+
+      if (pqty.value < 2){
+        document.getElementById("minusBtn").disabled = true;
+      }
+      if(btnMinus){
+        btnMinus.addEventListener('click',()=>{
+          document.getElementById("plusBtn").disabled = false;
+          let qty =parseInt(prd_qty.value,10)
+          qty=isNaN(qty)?1:qty
+          if(qty>1){
+            qty--;
+            pqty.value=qty;
+            if(pqty.value<2){
+              document.getElementById("minusBtn").disabled = true;
+            }
+          }
+        })
+      }
+
+      if(btnPlus){
+        btnPlus.addEventListener('click',()=>{
+          document.getElementById("minusBtn").disabled = false;
+          let qty =parseInt(prd_qty.value,10)
+          qty=isNaN(qty)?0:qty
+          if(qty<10){
+            qty++;
+            pqty.value=qty;
+            if(pqty.value==10){
+              document.getElementById("plusBtn").disabled = true;
+            }
+          }
+        })
+      }
+    })
+  </script>
+{% endblock scripts %}

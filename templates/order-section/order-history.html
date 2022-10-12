@@ -1,0 +1,39 @@
+{% extends 'index.html' %} {% block title %}
+<title>Shopping | Order-history</title>
+{% endblock title %} 
+{% block content %}
+<div class="container my-3">
+  <div class="row">
+    <div class="col mx-auto">
+      <div class="table-responsive">
+        <table class="table">
+          <thead class="text-center">
+            <tr>
+              <th>Name</th>
+              <th>Tracking No</th>
+              <th>Payment method</th>
+              <th>Status</th>
+              <th>Total Price</th>
+              <th>Date</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in history %}
+            <tr>
+              <td class="text-center fs-5">{{request.user.username}}</td>
+              <td class="text-center fs-5">{{item.tracking_no}}</td>
+              <td class="text-center fs-5">{{item.payment_method}}</td>
+              <td class="text-center fs-5">{{item.status}}</td>
+              <td class="text-center fs-5">{{item.total_price | stringformat:'d'}}</td>
+              <td class="text-center fs-5">{{item.created_at | date}}</td>
+              <td class="text-center fs-5">{{item.created_at | time}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

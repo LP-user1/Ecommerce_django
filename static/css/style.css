@@ -1,0 +1,56 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  box-sizing: border-box;
+}
+a {
+  text-decoration: none;
+}
+.live {
+  height: 7px;
+  width: 7px;
+  border-radius: 50%;
+  background-color: #ff69b4;
+  animation: pulse 1500ms infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: #ff69b4 0 0 0 0;
+  }
+
+  75% {
+    box-shadow: #ff69b400 0 0 0 13px;
+  }
+}
+div.pic-box {
+  position: relative;
+}
+
+span.hot-prod{
+  background-color: rgb(255, 93, 34);
+  color: white;
+  width: 3rem;
+  text-align: center;
+  padding: 5px;
+  border-radius: 5px;
+  top: 0rem;
+  right: 3.7rem;
+  position: absolute;
+  display: inline;
+  z-index: 10;
+  animation: pulse1 1500ms infinite;
+
+}
+
+@keyframes pulse1 {
+  0% {
+    box-shadow: rgb(255, 93, 34) 0 0 0 0;
+  }
+
+  80% {
+    box-shadow: rgba(255, 93, 34, 0) 0 0 0 .5rem;
+  }
+}

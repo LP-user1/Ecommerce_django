@@ -1,0 +1,31 @@
+{% extends 'index.html' %} {% block title %}
+<title>Shopping | Home</title>
+{% endblock title %} {% load static %} {% block content %}
+
+<div class="container my-2">
+  <div class="fw-light fs-3">Trending Products</div>
+  <div class="row">
+    <div class="col-12 mt-3 text-center">
+      <div class="row">
+        {% for item in products %}
+        <div class="col-sm-6 col-md-4 col-lg-3">
+          <div class="card border-light mb-3 shadow-sm">
+            <img
+              class="card-img-top"
+              src="{{item.product_image.url}}"
+              style="object-fit: scale-down; height: 150px"
+              alt="Category_Img"
+            />
+            <div class="card-body">
+              <h5 class="card-title">{{item.name}}</h5>
+              <p><span class="float-start"> <s>Rs: {{item.org_price }}</s></span> <span class="float-end">Rs: {{item.sell_price }}</span></p><br>
+              <a href="{% url 'product' item.category.name item.id %}" class="btn btn-warning bg-gradient stretched-link " style="border: none;outline: none;">Buy now</a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

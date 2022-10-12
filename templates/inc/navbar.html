@@ -1,0 +1,42 @@
+<nav class="navbar navbar-expand-md bg-dark navbar-dark ">
+  <div class="container">
+    <button class="navbar-toggler border-0 shadow-none style="outline: none !important;" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
+      <ul class="navbar-nav text-center">
+        <li class="nav-item me-3">
+          <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+        </li>
+        <li class="nav-item me-3">
+          <a class="nav-link" href="{% url 'collections' %}">Collection</a>
+        </li>
+        {% if request.user.is_authenticated %}
+          <li class="nav-item me-3 dropdown">
+            <a class="nav-link dropdown-toggle fw-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="text-transform: uppercase;">
+              {{request.user.username}}
+            </a>
+            <ul class="dropdown-menu text-center">
+              <li><a class="dropdown-item" href="#">Profile</a></li>
+              <li><a class="dropdown-item" href="{% url 'orderHistory' %}">Order History</a></li>
+              <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+          </li>
+          <li class="nav-item me-3">
+            <a class="nav-link" href="{% url 'wishList' %}">Wishlist</a>
+          </li>
+          <li class="nav-item me-3">
+            <a class="nav-link" href="{% url 'Cart' %}">Cart</a>
+          </li>
+        {% else %}
+          <li class="nav-item me-3">
+            <a class="nav-link" href="{% url 'signup' %}">Signup</a>
+          </li>
+          <li class="nav-item me-3">
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>

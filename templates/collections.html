@@ -1,0 +1,62 @@
+{% extends 'index.html' %} {% block title %}
+<title>Shopping | Collections</title>
+{% endblock title %} {% load static %} {% block content %}
+<div class="container my-2">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+      <li class="breadcrumb-item active">Collections</li>
+    </ol>
+  </nav>
+</div>
+<div class="container my-3">
+  <div class="row">
+    <div class="col-6 mx-auto">
+      <div class="text-center">
+        <p class="fw-light fs-2 text-dark">Category</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container text-center my-2">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="row">
+       {% if category %}
+       <div class="col-sm-12">
+         <div class="row">
+           {% for item in category %}
+           <div class="col  mx-auto"  >
+             <div class="card border-light mb-3 shadow  mx-auto" style="width: 12rem;" >
+               <img
+                 class="card-img-top"
+                 src="{{item.image.url}}"
+                 style="object-fit: contain;height: 6rem"
+                 alt="Category_Img"
+               />
+               <div class="card-body">
+                 <h5 class="card-title text-center" style="font-size: 1rem;">{{item.name}}</h5>
+                 <p class="card-title fw-light text-center" style="font-size: .8rem;">{{item.decription}}</p><br>
+                 <div class="text-center d-block">
+                  <a href="{% url 'collections' item.name %}" class="btn btn-warning bg-gradient stretched-link"style="border: none;outline: none;border-radius:3px;">See more</a>
+                 </div>
+               </div>
+           </div>
+         </div>
+         {% endfor %}
+         </div>
+       </div>
+       {% else %}
+       <div class="col-sm-4 text-center mx-auto">
+         <p class=" display-3">Oops!!</p> <br>
+         <p class=" display-5">Sorry We Have Not Enough Collection.</p>
+       </div>
+       {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock content %}
+

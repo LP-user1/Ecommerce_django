@@ -1,0 +1,56 @@
+{% extends 'index.html' %} {% block title %}
+<title>Shopping | Signup</title>
+{% endblock title %} {% load static %} {% block content %}
+<div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+      <li class="breadcrumb-item active">Signup</li>
+    </ol>
+  </nav>
+  <div class="row">
+    <div class="col-12">
+      <div class="row">
+        <div class="col-lg-5 col-md-6 col-sm-8 col-xs-4 px-4 py-2 mx-auto rounded-3 shadow">
+          <form method="post" action="">
+            {% csrf_token %}
+            <p class="fw-light text-center fs-2 mb-2">Signup</p>
+            <hr>
+            <div class="form-group">
+              <label class="form-label" for="username">Username</label>
+              {{form.username}} {% if form.errors %}
+              <p class="text-danger fw-light fs-4">{{form.errors}}</p>
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="email">Email</label>
+              {{form.email}} {% if form.errors.email %}
+              <p class="text-danger fw-light fs-4">{{form.errors.email}}</p>
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="pass1">password</label>
+              {{form.password1}} {% if form.errors.password1 %}
+              <p class="text-danger fw-light fs-4">{{form.errors.password1}}</p>
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="pass2">Confirm password</label>
+              {{form.password2}} {% if form.errors.password2 %}
+              <p class="text-danger fw-light fs-4">{{form.errors.password2}}</p>
+              {% endif %}
+            </div>
+              <div class="my-2 col-sm-12 text-center">
+                <button class="btn btn-secondary w-100" type="submit">
+                  Signup
+                </button>
+                <br>
+                <div class="link  mt-3 text-center">Already User?<a href="{% url 'login' %}" > Go to login!</a></div>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

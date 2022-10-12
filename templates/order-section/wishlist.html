@@ -1,0 +1,46 @@
+{% extends 'index.html' %} {% block title %}
+<title>Shopping | Wishlist</title>
+{% endblock title %} 
+{% block content %}
+<div class="container my-3">
+  <div class="row">
+    <div class="col">
+      <div class="row">
+        {% if wishlist %}
+        {% for item in wishlist %}
+         
+            <div class="col mx-auto" >
+              <div class="card border-light mb-3 shadow-sm "  >
+                <img
+                  class="card-img-top"
+                  src="{{item.product.product_image.url}}"
+                  style="object-fit: contain;height: 4rem;"
+                  alt="wishlist_Img"
+                />
+                <div class="card-body">
+                  <h5 class="card-title text-center" style="font-size: 1rem;">{{item.product.name}}</h5>
+                  <p class="card-text text-center"><span>Unit: {{item.product.sell_price | stringformat:'d' }}</span></p>
+                  <div class="text-center d-block">
+                    <a href="{% url 'deleteWish' item.product.id %}" onclick="return confirm('Do you Sure ?')" class="btn btn-warning bg-gradient" style="border: none;outline: none;border-radius: 2rem;">Remove</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="container my-5">
+              <div class="row">
+                <div class="col-sm-4 text-center mx-auto">
+                  <p class=" display-3">Oops!!</p> <br>
+                  <p class=" display-5">Your Wishlist is Empty</p>
+                </div>
+              </div>
+            </div>
+
+          {% endif %}
+        
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

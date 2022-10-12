@@ -1,0 +1,206 @@
+{% extends 'index.html' %} {% block title %}
+<title>Shopping | Product-details</title>
+{% endblock title %} 
+
+{% block content %}
+<div class="container my-2">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'collections' %}">Collections</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'collections' c_name %}" style="text-transform:capitalize;">{{c_name}}</a></li>
+      <li class="breadcrumb-item active" style="text-transform:capitalize;" aria-current="page">{{product.name}}</li>
+    </ol>
+  </nav>
+</div>
+<div class="container my-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="row">
+        <div class="col-sm-6 col-md-6 col-lg-6 pic-box">
+          {% if product.trending %}
+          <span class="hot-prod">Hot</span>
+          {% endif %}
+          <img 
+            src="{{product.product_image.url}}"
+            style="object-fit: cover;max-height: 300px;"
+            class="img-fluid mx-auto d-block img-responsive rounded-2"
+            alt="product-image"
+          />
+        </div>
+        <div
+          class="col-sm-6 col-md-6 col-lg-6 shadow-sm rounded-2 bg-light mx-auto px-3"
+        >
+          <div class="row">
+            <div class="col-12">
+              <div class="my-3">
+                <p class="fw-light text-secondary fs-1">{{product.name | upper}}</p>
+              </div>
+              <div class="accordion mb-2  " id="accordionFlushExample">
+                <div class="accordion-item  border-0">
+                  <h2 class="accordion-header" id="flush-headingOne">
+                    <button
+                      class="accordion-button  shadow-none collapsed"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#flush-collapseOne"
+                      aria-expanded="false"
+                      aria-controls="flush-collapseOne"
+                    >
+                      Description
+                    </button>
+                  </h2>
+                  <div
+                    id="flush-collapseOne"
+                    class="accordion-collapse collapse"
+                    aria-labelledby="flush-headingOne"
+                    data-bs-parent="#accordionFlushExample"
+                  >
+                    <div class="accordion-body">{{product.decription}}.</div>
+                  </div>
+                </div>
+              </div>
+                <small>{{product.small_decs}}</small>
+                <div class="my-2">
+                  <span class="fw-normal text-dark me-2 fs-5"
+                    >Rs: {{product.sell_price}}</span
+                  >
+                  <div class="vr"></div>
+                  <span class="fw-normal text-secondary ms-2 fs-5"
+                    ><s>Rs: {{product.org_price}}</s></span
+                  >
+                </div>
+            </div>
+            <div class="col-12 my-2">
+              <div class="group">
+                {% if product.quantity > 0 %}
+                <input type="hidden" id="pid" value="{{product.id}}" >
+                  <span>
+                    <div class="input-group  mb-2" style="width: 9rem;">
+                      <button class="bg-success  bg-gradient text-light btn input-group-text" disabled="true" id="minusBtn">-</button>
+                      <input type="text" id="vqty" class="form-control text-center " readonly value="1">
+                      <button class="bg-success  bg-gradient text-light btn input-group-text" id="plusBtn">+</button>
+                    </div>
+                  </span>
+                  <a href="#" id="addCartBtn" class=" float-start btn btn-secondary shadow-sm">
+                    Add to Cart
+                  </a>
+                  {% else %}
+                  <p class="badge bg-gradient border-0 shadow-sm p-3 bg-danger  text-center">Out of Stock</p>
+                {% endif %}
+                <a href="#" id="addWishBtn" class="btn float-end btn-warning shadow-sm">
+                  Add to wishlist
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+  <script>
+    document.addEventListener('DOMContentLoaded',(event)=>{
+      const btnMinus = document.getElementById('minusBtn');
+      const prd_qty = document.getElementById('vqty');
+      const btnPlus = document.getElementById('plusBtn');
+
+      const prd_id = document.getElementById('pid');
+      const addCart = document.getElementById('addCartBtn');
+
+      const addWish = document.getElementById('addWishBtn');
+        
+      if(btnMinus){
+        btnMinus.addEventListener('click',()=>{
+          document.getElementById("plusBtn").disabled = false;
+          let qty =parseInt(prd_qty.value,10)
+          qty=isNaN(qty)?1:qty
+          if(qty>1){
+            qty--;
+            vqty.value=qty;
+            if(vqty.value<2){
+              document.getElementById("minusBtn").disabled = true;
+            }
+          }
+        })
+      }
+
+      if(btnPlus){
+        btnPlus.addEventListener('click',()=>{
+          document.getElementById("minusBtn").disabled = false;
+          let qty =parseInt(prd_qty.value,10)
+          qty=isNaN(qty)?0:qty
+          if(qty<10){
+            qty++;
+            vqty.value=qty;
+            if(vqty.value==10){
+              document.getElementById("plusBtn").disabled = true;
+            }
+          }
+        })
+      }
+      if(addCart){
+        addCart.addEventListener('click',()=>{
+          let qty =parseInt(prd_qty.value,10)
+          qty=isNaN(qty)?0:qty
+          if(qty>0){
+            let postobj = {
+              prod_qty : qty,
+              id : prd_id.value,
+            }
+            fetch("/addCart",{
+              method : 'POST',
+              credentials : 'same-origin',
+              headers : {
+                'Accept' : 'application/json',
+                'X-Requested-With' : 'XMLHttpRequest',
+                'X-CSRFToken' : '{{csrf_token}}',
+              },
+              body : JSON.stringify(postobj)
+            }).then((response) =>{
+                return response.json();
+            }).then((data)=>{
+                alert(data['status'])
+            });
+          }
+          else{
+            alert("Quantity not acceptable !")
+          }
+        })
+      }
+      if(addWish){
+        addWish.addEventListener('click',()=>{
+          
+          if(addWish){
+            let postobj = {
+              id : prd_id.value,
+            }
+            fetch("/addWishlist",{
+              method : 'POST',
+              credentials : 'same-origin',
+              headers : {
+                'Accept' : 'application/json',
+                'X-Requested-With' : 'XMLHttpRequest',
+                'X-CSRFToken' : '{{csrf_token}}',
+              },
+              body : JSON.stringify(postobj)
+            }).then((response) =>{
+                return response.json();
+            }).then((data)=>{
+                alert(data['status'])
+            });
+          }
+          else{
+            alert("Not acceptable !")
+          }
+        })
+      }
+    })
+  </script>
+{% endblock scripts %}
+
+

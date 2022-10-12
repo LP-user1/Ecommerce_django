@@ -1,0 +1,100 @@
+{% extends 'index.html' %} {% block title %}
+<title>Shopping | Checkout</title>
+{% endblock title %} 
+{% block content %}
+<div class="container-fluid px-3 my-3">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="table-responsive">
+        <p class="display-5 float-start">Your Collections</p>
+        <table class="table mx-auto">
+          <tbody class="d-">
+            {% for item in cartitems %}
+            <tr>
+              <td><img src="{{item.product.product_image.url}}" style="object-fit:contain; height: 2rem;width:4rem;" alt="product-image" ></td>
+              <td style="font-size: .9rem;">{{item.product.name}}</td>
+              <td style="font-size: .9rem;">{{item.total_cost | stringformat:'d'}}</td>
+              <td style="font-size: .9rem;">{{item.prod_quantity}}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+              <td colspan="4" class="text-center fw-light fs-3">Total: {{total_price | stringformat:'d'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card border-0 rounded-4">
+        <div class="card-header">
+          <p class="text-center card-title">Shipping Details</p>
+        </div>
+        <div class="card-body">
+          <form class="row g-3 needs-validation" action="{% url 'placeorder' %}" method="post" novalidate>
+            {% csrf_token %}
+            <div class="col-sm-4">
+              <label for="validationCustom01" class="form-label">First name</label>
+              <input type="text" class="form-control shadow-none" name="f_name" id="validationCustom01" value="{{request.user.first_name}}" required>
+            </div>
+            <div class="col-sm-4">
+              <label for="validationCustom02" class="form-label">Last name</label>
+              <input type="text" class="form-control shadow-none" name="l_name" id="validationCustom02" value="{{request.user.last_name}}" required>
+            </div>
+            <div class="col-sm-4">
+              <label for="validationCustomUsername" class="form-label">Email</label>
+              <input type="email" class="form-control shadow-none" value="{{request.user.email}}" readonly name="email" id="validationCustom03" required>
+            </div>
+            <div class="col-sm-6">
+              <label for="validationCustom03" class="form-label">City</label>
+              <input type="text" class="form-control shadow-none" name="city" value="{{userprofile.city}}" id="validationCustom03" required>
+            </div>
+            <div class="col-sm-3">
+              <label for="validationCustom04" class="form-label">State</label>
+              <input type="text" class="form-control shadow-none" name="state" value="{{userprofile.state}}" id="validationCustom05" required>
+            </div>
+            <div class="col-sm-3">
+              <label for="validationCustom05" class="form-label">Pincode</label>
+              <input type="text" class="form-control shadow-none" name="pincode" value="{{userprofile.pincode}}" id="validationCustom05" required>
+            </div>
+            <div class="col-sm-6">
+              <label for="validationCustom05" class="form-label">Mobile No</label>
+              <input type="text" class="form-control shadow-none" name="mobile_no" value="{{userprofile.mobile_no}}" id="validationCustom05" required>
+            </div>
+            <div class="col-sm-6">
+              <label for="validationCustom05" class="form-label">Country</label>
+              <input type="text" class="form-control shadow-none" name="country" value="{{userprofile.country}}" id="validationCustom05" required>
+            </div>
+            <div class="col-sm-12">
+              <div class="mb-3">
+                <label for="validationTextarea" class="form-label">Address</label>
+                <textarea class="form-control shadow-none" name="address" id="validationTextarea" placeholder="Fill your address" required>{{userprofile.address}}</textarea>
+              </div>
+            </div>
+            <div class="col-12 d-block text-center ">
+              <input type="hidden" value="COD" name="payment_method">
+              <button type="submit" class="btn btn-warning bg-gradient  shadow-none ">Cash On Delivery</button>
+              <a href="#" class="btn bg-info text-dark shadow-none  bg-gradient " type="submit">UPI Payment</a>
+            </div>
+          </form> 
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script>
+  //form validation
+  const forms = document.querySelectorAll('.needs-validation')
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+      form.classList.add('was-validated')
+    }, false)
+  })
+</script>
+{% endblock scripts %}
