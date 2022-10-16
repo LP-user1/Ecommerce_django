@@ -3,13 +3,19 @@
 {% endblock title %} 
 {% block content %}
 <div class="container my-3">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+      <li class="breadcrumb-item active">Order History</li>
+    </ol>
+  </nav>
   <div class="row">
     <div class="col mx-auto">
       <div class="table-responsive">
         <table class="table">
           <thead class="text-center">
             <tr>
-              <th>Name</th>
+              <th></th>
               <th>Tracking No</th>
               <th>Payment method</th>
               <th>Status</th>
@@ -21,7 +27,7 @@
           <tbody>
             {% for item in history %}
             <tr>
-              <td class="text-center fs-5">{{request.user.username}}</td>
+              <td><a href="{% url 'historyView' item.tracking_no %}" class="btn bg-secondary bg-gradient text-white ">View</a></td>
               <td class="text-center fs-5">{{item.tracking_no}}</td>
               <td class="text-center fs-5">{{item.payment_method}}</td>
               <td class="text-center fs-5">{{item.status}}</td>

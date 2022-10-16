@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 import json
 
+@login_required(login_url='login')
 def addCart(request):
   if request.headers.get('x-requested-with')=='XMLHttpRequest':
     if request.user.is_authenticated:
@@ -28,6 +29,34 @@ def addCart(request):
   else:
     messages.error(request,"Access Invalid ..")
     return redirect('home')
+
+@login_required(login_url='login')
+def updateCart(request):
+  if request.headers.get('x-requested-with')=='XMLHttpRequest':
+    if request.user.is_authenticated:
+      data=json.load(request)
+      prd_qty = data['prod_qty']
+      prd_id = data['id']
+      prod_status = Product.objects.get(id=prd_id)
+      if prod_status:
+        if prod_status.quantity>=prd_qty:
+          if Cart.objects.filter(user=request.user,product_id=prd_id):
+            cartItem = Cart.objects.get(user=request.user,product_id=prd_id)
+            cartItem.prod_quantity = prd_qty
+            cartItem.save()
+            return JsonResponse({'status':'Cart updated ..'},status=200)
+          else:
+            return JsonResponse({'status':"Failed .."},status=200)
+        else:
+          return JsonResponse({'status':"Stock is lesser than your request .."},status=200)
+      else:
+        return JsonResponse({'status':'Product not Found'},status=200)
+    else:
+      return JsonResponse({'status':'Login to continue ..'},status=200)
+  else:
+    messages.error(request,"Access Invalid ..")
+    return redirect('home')
+    
     
 @login_required(login_url='login')
 def viewCart(request):
@@ -48,7 +77,8 @@ def deleteCart(request,id):
   else:
     messages.success(request,"User Access Invalid ")
     return redirect('home')
-  
+
+@login_required(login_url='login') 
 def addWishList(request):
   if request.method == 'POST':
     if request.user.is_authenticated:

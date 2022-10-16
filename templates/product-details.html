@@ -86,6 +86,7 @@
                     Add to Cart
                   </a>
                   {% else %}
+                  <input type="hidden" id="pid" value="{{product.id}}" >
                   <p class="badge bg-gradient border-0 shadow-sm p-3 bg-danger  text-center">Out of Stock</p>
                 {% endif %}
                 <a href="#" id="addWishBtn" class="btn float-end btn-warning shadow-sm">
@@ -99,8 +100,16 @@
     </div>
   </div>
 </div>
-
-{% endblock content %}
+{% endblock content %} {% block message %}
+  <div class="container mt-2 fixed-top d-none" id="msgContainer" >
+    <div class="row">
+      <div class="col-md-6 mx-auto">
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <strong>Message! </strong> <span class="fw-light" id="msgTxt" style="text-transform: capitalize;"></span>
+          <button type="button" id="btnClose" class="btn-close shadow-none" data-bs-dismiss="alert" aria-label="close"></button>
+        </div>
+  </div>
+{% endblock message %}
 
 {% block scripts %}
   <script>
@@ -108,11 +117,18 @@
       const btnMinus = document.getElementById('minusBtn');
       const prd_qty = document.getElementById('vqty');
       const btnPlus = document.getElementById('plusBtn');
-
       const prd_id = document.getElementById('pid');
       const addCart = document.getElementById('addCartBtn');
-
       const addWish = document.getElementById('addWishBtn');
+
+      const msgCon = document.getElementById('msgContainer')
+      const closeBtn = document.getElementById('btnClose')
+
+      if (closeBtn){
+        closeBtn.addEventListener('click',()=>{
+          location.reload()
+        })
+      }
         
       if(btnMinus){
         btnMinus.addEventListener('click',()=>{
@@ -164,7 +180,7 @@
             }).then((response) =>{
                 return response.json();
             }).then((data)=>{
-                alert(data['status'])
+                message(data['status']);
             });
           }
           else{
@@ -191,7 +207,7 @@
             }).then((response) =>{
                 return response.json();
             }).then((data)=>{
-                alert(data['status'])
+                message(data['status']);
             });
           }
           else{
@@ -199,8 +215,11 @@
           }
         })
       }
+      
+      function message(msg){
+        msgCon.classList.remove("d-none")
+        document.getElementById("msgTxt").innerHTML =msg;
+      }
     })
   </script>
 {% endblock scripts %}
-
-

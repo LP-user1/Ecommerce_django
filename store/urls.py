@@ -16,6 +16,7 @@ urlpatterns = [
     path('logout/user/*lo',logoutUser,name="logout"),
 
     path('addCart',addCart,name="addCart"),
+    path('updateCart',updateCart,name="updateCart"),
     path('cart',viewCart,name="Cart"),
     path('deleteCart/<int:id>',deleteCart,name="deleteCart"),
 
@@ -26,7 +27,6 @@ urlpatterns = [
     path('checkOut',viewCheckout,name="checkout"),
     path('placeOrder/*',placeOrder,name="placeorder"),
 
-    path('orderHistory/user',orderHistory,name="orderHistory")
+    path('orderHistory/user',orderHistory,name="orderHistory"),
+    path('orderHistoryView/user/<str:t_no>',historyView,name="historyView"),
 ]
-
-

@@ -1,0 +1,43 @@
+{% extends 'index.html' %} {% block title %}
+<title>Shopping | Product-details</title>
+{% endblock title %} {% block content %}
+<div class="container-fluid px-3 my-3">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'orderHistory' %}">Order History</a></li>
+      <li class="breadcrumb-item active">Order View</li>
+    </ol>
+  </nav>
+  <div class="row">
+    <div class="col-md-6 mx-auto">
+      <div class="table-responsive">
+        <p class="display-5 float-start">Your Order</p>
+        <table class="table text-center">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Quantity</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody >
+            {% for item in viewHistory %}
+            <tr>
+              <td><img src="{{item.product.product_image.url}}" style="object-fit:contain; height: 2rem;width:4rem;" alt="product-image" ></td>
+              <td >{{item.product.name}}</td>
+              <td >{{item.order_quantity}}</td>
+              <td>{{item.price | stringformat:'d'}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="col  mx-auto">
+          <p  class="text-center fw-light fs-3">Total: {{order.total_price | stringformat:'d'}}</p>
+        </div>
+      </div>
+    </div>
+    </div>
+    </div>
+{% endblock content %}
